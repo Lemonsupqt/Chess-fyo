@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dostoevsky Chess — A Game of Souls</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Atmospheric background -->
+  <div class="atmosphere">
+    <div class="fog fog-1"></div>
+    <div class="fog fog-2"></div>
+  </div>
+
+  <!-- Main container -->
+  <div id="app">
+    <!-- Landing/Home Screen -->
+    <section id="home-screen" class="screen active">
+      <div class="home-content">
+        <header class="main-header">
+          <div class="ornament top-ornament">❧</div>
+          <h1 class="main-title">Dostoevsky Chess</h1>
+          <p class="subtitle">A Game of Souls</p>
+          <div class="ornament bottom-ornament">❧</div>
+        </header>
+
+        <div class="quote-box home-quote">
+          <p class="quote-text">"The soul is healed by being with children."</p>
+          <p class="quote-author">— Fyodor Dostoevsky</p>
+        </div>
+
+        <div class="menu-buttons">
+          <button id="create-game-btn" class="btn btn-primary">
+            <span class="btn-icon">♔</span>
+            Create New Game
+          </button>
+          <button id="join-game-btn" class="btn btn-secondary">
+            <span class="btn-icon">♚</span>
+            Join Game
+          </button>
+        </div>
+
+        <div class="join-form" id="join-form" style="display: none;">
+          <input type="text" id="join-game-id" placeholder="Enter Game Code" class="input-field">
+          <button id="join-submit-btn" class="btn btn-primary">Enter the Game</button>
+          <button id="join-cancel-btn" class="btn btn-ghost">Cancel</button>
+        </div>
+      </div>
+
+      <footer class="home-footer">
+        <p class="footer-quote">"To go wrong in one's own way is better than to go right in someone else's."</p>
+      </footer>
+    </section>
+
+    <!-- Lobby Screen -->
+    <section id="lobby-screen" class="screen">
+      <div class="lobby-content">
+        <h2 class="section-title">Game Chamber</h2>
+        
+        <div class="game-code-box">
+          <p class="code-label">Your Game Code</p>
+          <div class="code-display">
+            <span id="game-code">--------</span>
+            <button id="copy-code-btn" class="btn-icon-only" title="Copy code">📋</button>
+          </div>
+        </div>
+
+        <div class="share-section">
+          <p class="share-label">Share this link with your friend:</p>
+          <div class="share-link-box">
+            <input type="text" id="share-link" readonly class="input-field">
+            <button id="copy-link-btn" class="btn btn-small">Copy</button>
+          </div>
+        </div>
+
+        <div class="player-setup">
+          <label for="player-name" class="input-label">Your Name, Wanderer:</label>
+          <input type="text" id="player-name" placeholder="Enter your name" class="input-field" maxlength="20">
+        </div>
+
+        <div class="lobby-status">
+          <div class="status-indicator" id="lobby-status">
+            <span class="pulse"></span>
+            <span class="status-text">Awaiting opponent...</span>
+          </div>
+        </div>
+
+        <button id="start-game-btn" class="btn btn-primary btn-large" disabled>
+          <span class="btn-icon">⚔</span>
+          Begin the Match
+        </button>
+
+        <div class="quote-box lobby-quote">
+          <p class="quote-text" id="lobby-quote">"Taking a new step, uttering a new word, is what people fear most."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Screen -->
+    <section id="game-screen" class="screen">
+      <div class="game-layout">
+        <!-- Left Panel - Opponent Info -->
+        <aside class="player-panel opponent-panel">
+          <div class="player-card">
+            <div class="player-avatar opponent-avatar">♚</div>
+            <div class="player-info">
+              <h3 class="player-name" id="opponent-name">Awaiting...</h3>
+              <p class="player-color" id="opponent-color">Black</p>
+            </div>
+            <div class="captured-pieces" id="opponent-captured"></div>
+          </div>
+        </aside>
+
+        <!-- Center - Chess Board -->
+        <main class="board-container">
+          <div class="game-status-bar">
+            <div class="turn-indicator" id="turn-indicator">
+              <span class="turn-piece">♔</span>
+              <span class="turn-text">White to move</span>
+            </div>
+            <div class="game-status" id="game-status"></div>
+          </div>
+
+          <div class="chess-board-wrapper">
+            <div class="board-frame">
+              <div id="chess-board" class="chess-board"></div>
+            </div>
+            <div class="file-labels">
+              <span>a</span><span>b</span><span>c</span><span>d</span>
+              <span>e</span><span>f</span><span>g</span><span>h</span>
+            </div>
+            <div class="rank-labels">
+              <span>8</span><span>7</span><span>6</span><span>5</span>
+              <span>4</span><span>3</span><span>2</span><span>1</span>
+            </div>
+          </div>
+
+          <div class="game-quote-display" id="game-quote">
+            <p class="quote-text"></p>
+          </div>
+        </main>
+
+        <!-- Right Panel - Your Info & Controls -->
+        <aside class="player-panel self-panel">
+          <div class="player-card">
+            <div class="player-avatar self-avatar">♔</div>
+            <div class="player-info">
+              <h3 class="player-name" id="self-name">You</h3>
+              <p class="player-color" id="self-color">White</p>
+            </div>
+            <div class="captured-pieces" id="self-captured"></div>
+          </div>
+
+          <div class="game-controls">
+            <button id="offer-draw-btn" class="btn btn-secondary btn-small">
+              <span>☮</span> Offer Draw
+            </button>
+            <button id="resign-btn" class="btn btn-danger btn-small">
+              <span>⚐</span> Resign
+            </button>
+          </div>
+
+          <div class="move-history-panel">
+            <h4 class="panel-title">Chronicle of Moves</h4>
+            <div class="move-history" id="move-history"></div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Chat Panel -->
+      <div class="chat-panel" id="chat-panel">
+        <div class="chat-header">
+          <h4>Correspondence</h4>
+          <button id="toggle-chat" class="btn-icon-only">−</button>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input-area">
+          <input type="text" id="chat-input" placeholder="Send a message..." class="input-field">
+          <button id="send-message-btn" class="btn btn-primary btn-small">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Over Modal -->
+    <div id="game-over-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-ornament">❧</div>
+        <h2 class="modal-title" id="game-over-title">Game Over</h2>
+        <p class="modal-subtitle" id="game-over-result">Checkmate!</p>
+        <div class="quote-box modal-quote">
+          <p class="quote-text" id="game-over-quote">"The mystery of human existence lies not in just staying alive, but in finding something to live for."</p>
+        </div>
+        <div class="modal-buttons">
+          <button id="new-game-btn" class="btn btn-primary">New Game</button>
+          <button id="review-game-btn" class="btn btn-secondary">Review Game</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promotion Modal -->
+    <div id="promotion-modal" class="modal">
+      <div class="modal-content modal-small">
+        <h3 class="modal-title">Choose Your Piece</h3>
+        <p class="modal-subtitle">"Power is given only to those who dare..."</p>
+        <div class="promotion-choices" id="promotion-choices">
+          <button class="promotion-piece" data-piece="q">♕</button>
+          <button class="promotion-piece" data-piece="r">♖</button>
+          <button class="promotion-piece" data-piece="b">♗</button>
+          <button class="promotion-piece" data-piece="n">♘</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Draw Offer Modal -->
+    <div id="draw-modal" class="modal">
+      <div class="modal-content modal-small">
+        <h3 class="modal-title">Draw Offered</h3>
+        <p class="modal-subtitle">Your opponent offers a draw. Do you accept?</p>
+        <div class="modal-buttons">
+          <button id="accept-draw-btn" class="btn btn-primary">Accept</button>
+          <button id="decline-draw-btn" class="btn btn-secondary">Decline</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chess.js@1.0.0-beta.8/dist/chess.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/board.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
